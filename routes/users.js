@@ -8,10 +8,17 @@ var logger = log4js.getLogger();
 
 router.post('/login', function (req, res, next) {
   const resMsg = 'Login succeed ' + req.body.userId;
-  res.send(resMsg);
+  logger.debug(req.body);
+  User.find({ username: req.body.username, password: req.body.password }, (err, user) => {
+    if (err || !user.length) {
+      logger.error(err);
+      res.status(401).send('Authentication Failed');
+      return;
+    }
+
+    res.json(user);
+  });
 });
-
-
 
 /* GET users listing. */
 // ユーザー一覧取得

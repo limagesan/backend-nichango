@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var log4js = require('log4js');
 var logger = log4js.getLogger();
-var session = require('express-session');
 var User = require('../models/user.model');
 
 
@@ -17,7 +16,6 @@ router.post('/login', function (req, res, next) {
       res.status(401).send('Authentication Failed');
       return;
     }
-    req.session.username = req.body.username;
     res.json(user);
   });
 });

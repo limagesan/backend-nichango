@@ -3,22 +3,8 @@ var router = express.Router();
 var User = require('../models/user.model');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
+var session = require('express-session');
 
-/* GET users listing. */
-
-router.post('/login', function (req, res, next) {
-  const resMsg = 'Login succeed ' + req.body.userId;
-  logger.debug(req.body);
-  User.find({ username: req.body.username, password: req.body.password }, (err, user) => {
-    if (err || !user.length) {
-      logger.error(err);
-      res.status(401).send('Authentication Failed');
-      return;
-    }
-
-    res.json(user);
-  });
-});
 
 /* GET users listing. */
 // ユーザー一覧取得

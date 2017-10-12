@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('./mongo');
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -26,10 +25,18 @@ app.use(logger('dev'));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS")
   res.header("Access-Control-Allow-Credentials", true);
-  next()
+
+  if ('OPTIONS' === req.method) {
+    //respond with 200
+    res.send(200);
+  }
+  else {
+    //move on
+    next();
+  }
 });
 
 app.use(bodyParser.json());
@@ -39,7 +46,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

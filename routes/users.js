@@ -3,7 +3,6 @@ var router = express.Router();
 var User = require('../models/user.model');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
-var session = require('express-session');
 
 
 /* GET users listing. */
@@ -14,22 +13,7 @@ router.get('/', function (req, res, next) {
       logger.error(err);
       return res.json([]);
     }
-
     res.json(users);
-  });
-});
-
-// ユーザー作成
-router.post('/', (req, res, next) => {
-  logger.info('post', req.body);
-  var user = new User(req.body);
-  user.save((err) => {
-    if (err) {
-      logger.error(err);
-      return res.send("");
-    }
-
-    res.send('new user created');
   });
 });
 

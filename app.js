@@ -9,6 +9,7 @@ var index = require('./routes/index');
 
 var app = express();
 
+
 // connect MongoDB
 mongoose.connect('mongodb://localhost/timetable');
 

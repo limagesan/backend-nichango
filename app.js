@@ -10,7 +10,11 @@ var index = require("./routes/index");
 var app = express();
 
 // connect MongoDB
-mongoose.connect("mongodb://localhost/nichango");
+const mongoURL =
+  "mongodb://heroku_gfrfzmz0:kij8kfnq8tb6v9caqbr8s6sj62@ds263847.mlab.com:63847/heroku_gfrfzmz0";
+
+// const mongoURL = "mongodb://localhost/nichango";
+mongoose.connect(mongoURL);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

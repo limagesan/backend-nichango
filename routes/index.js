@@ -90,7 +90,7 @@ function getRoom(req, res, next) {
 function postText(req, res, next) {
   const id = req.params.roomId;
   Room.findOne({ _id: id }, (err, room) => {
-    const newTexts = room.texts.concat(req.body.text);
+    const newTexts = room.texts.unshift(req.body.text);
     Room.update({ _id: id }, { texts: newTexts }, err => {
       if (err) logger.error(err);
     });

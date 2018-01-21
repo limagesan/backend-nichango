@@ -9,11 +9,12 @@ const bcrypt = require("bcrypt");
 var users = require("./users");
 const httpStatus = require("http-status");
 const saltRounds = 10;
+const fs = require("fs");
 
-const titles = ["タイトル1", "タイトル2", "タイトル2", "タイトル3", "タイトル4", "タイトル5", "タイトル6"];
-
-function setTitles(titles) {}
-
+let titles = fs.readFileSync("./data/titles.csv", "utf8");
+titles = titles.split("\r");
+// const titles = ["タイトル1", "タイトル2", "タイトル2", "タイトル3", "タイトル4", "タイトル5", "タイトル6"];
+console.log("titles", titles);
 /* GET home page. */
 router.get("/", function(req, res, next) {
   res.render("index", { title: "Express" });

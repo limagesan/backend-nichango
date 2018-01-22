@@ -2,31 +2,16 @@ var express = require("express");
 var router = express.Router();
 var log4js = require("log4js");
 var logger = log4js.getLogger();
-var User = require("../models/user.model");
 var Room = require("../models/room.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-var users = require("./users");
 const httpStatus = require("http-status");
-const saltRounds = 10;
 const fs = require("fs");
 
 let titles = fs.readFileSync("./data/titles.csv", "utf8");
 titles = titles.split("\r");
-// const titles = ["タイトル1", "タイトル2", "タイトル2", "タイトル3", "タイトル4", "タイトル5", "タイトル6"];
-console.log("titles", titles);
 /* GET home page. */
 router.get("/", function(req, res, next) {
   res.render("index", { title: "Express" });
 });
-
-// router.post("/login", login);
-
-// ユーザー作成
-// router.post("/users", createUser);
-// router.options("/users", (req, res, next) => {
-//   res.status(200).send();
-// });
 
 router.post("/room", createRoom);
 router.options("/room", (req, res, next) => {
@@ -36,31 +21,6 @@ router.options("/room", (req, res, next) => {
 
 router.get("/title", (req, res, next) => {
   res.json({ title: titles[Math.floor(Math.random() * titles.length)] });
-});
-
-router.get("/test", (req, res, next) => {
-  // Room.findById(req.query.roomId, room => {
-  //   res.json({ room });
-  // });
-
-  const room = new Room({
-    title: "oioi",
-    texts: ["aaa"]
-  });
-
-  // room.save().then(room => {
-  //   console.log("saved");
-  //   res.json({ room });
-  // });
-
-  room.save().then(savedUser => {
-    res.json({
-      success: true,
-      message: "Authentication successfully finished."
-    });
-  });
-  // res.json({ ok: "yes" });
-  return;
 });
 
 router.get("/room", (req, res, next) => {
@@ -100,7 +60,6 @@ function postText(req, res, next) {
 }
 
 function createRoom(req, res, next) {
-  // const texts = [];
   const room = new Room({
     title: req.body.title,
     texts: []
@@ -114,59 +73,5 @@ function createRoom(req, res, next) {
     });
   });
 }
-
-// function compareHash(str, hash) {
-//   return new Promise((resolve, reject) => {
-//     bcrypt.compare(str, hash, (err, res) => {
-//       if (err) reject(err);
-//       else resolve(res);
-//     });
-//   });
-// }
-
-// function login(req, res, next) {
-//   User.findOne({ username: req.body.username }, async function(err, user) {
-//     if (err) throw err;
-
-//     // validation
-//     if (!user) {
-//       res.status(401);
-//       res.json({
-//         success: false,
-//         message: "Authentication failed. User not found."
-//       });
-//       return;
-//     }
-
-//     const auth = await compareHash(req.body.password, user.password);
-//     if (!auth) {
-//       res.status(401);
-//       res.json({
-//         success: false,
-//         message: "Authentication failed. Wrong password.",
-//         status: 401
-//       });
-//       return;
-//     }
-
-//     // when valid -> create token
-//     var token = jwt.sign(
-//       {
-//         username: user.username,
-//         password: user.password
-//       },
-//       process.env.SECRET || "secret",
-//       {
-//         expiresIn: "24h"
-//       }
-//     );
-
-//     res.json({
-//       success: true,
-//       message: "Authentication successfully finished.",
-//       token: token
-//     });
-//   });
-// }
 
 module.exports = router;

@@ -8,18 +8,12 @@ var mongoose = require("./mongo");
 var index = require("./routes/index");
 
 var app = express();
-// connect MongoDB
-const mongoURL =
-  process.env.NODE_ENV == "local"
-    ? "mongodb://localhost/nichango"
-    : "mongodb://heroku_gfrfzmz0:kij8kfnq8tb6v9caqbr8s6sj62@ds263847.mlab.com:63847/heroku_gfrfzmz0";
 
 const allowDomain = (process.env.NODE_ENV = "local"
   ? "http://localhost:3000"
   : "https://client-nichango.herokuapp.com");
 
-// const mongoURL = "mongodb://localhost/nichango";
-mongoose.connect(mongoURL);
+mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

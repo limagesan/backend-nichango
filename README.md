@@ -1,7 +1,7 @@
 # backend-nichango
 Expressアプリケーション
 
-client side -> https://github.com/limagesan/backend-nichango
+client side -> https://github.com/limagesan/client-nichango
 
 ## 実行環境
 

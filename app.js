@@ -9,9 +9,20 @@ var index = require("./routes/index");
 
 var app = express();
 
-const allowDomain = (process.env.NODE_ENV = "local"
-  ? "http://localhost:3000"
-  : "https://client-nichango.herokuapp.com");
+const allowDomains = [
+  "https://client-nichango.herokuapp.com",
+  "http://www.2ch-ngo.club"
+];
+
+function checkAllowDomains(protocol, host) {
+  const address = protocol + "://" + host;
+  return allowDomains.indexOf(address) !== -1;
+}
+
+const allowDomain =
+  process.env.NODE_ENV == "local"
+    ? "http://localhost:3000"
+    : "https://client-nichango.herokuapp.com";
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -25,7 +36,18 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", allowDomain);
+  console.log("Request", req.protocol, req.host, req.hostname);
+
+  if (process.env.NODE_ENV == "local") {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  } else {
+    checkAllowDomains(req.protocol, req.host) &&
+      res.header(
+        "Access-Control-Allow-Origin",
+        req.protocol + "://" + req.host
+      );
+  }
+
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -46,7 +68,11 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 

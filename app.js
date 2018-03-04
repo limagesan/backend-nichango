@@ -22,7 +22,7 @@ function checkAllowDomains(protocol, host) {
 const allowDomain =
   process.env.NODE_ENV == "local"
     ? "http://localhost:3000"
-    : "https://client-nichango.herokuapp.com";
+    : "http://www.2ch-ngo.club";
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -36,17 +36,7 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 
 app.use((req, res, next) => {
-  console.log("Request", req.protocol, req.host, req.hostname);
-
-  if (process.env.NODE_ENV == "local") {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  } else {
-    checkAllowDomains(req.protocol, req.host) &&
-      res.header(
-        "Access-Control-Allow-Origin",
-        req.protocol + "://" + req.host
-      );
-  }
+  res.header("Access-Control-Allow-Origin", allowDomain);
 
   res.header(
     "Access-Control-Allow-Headers",

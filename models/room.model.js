@@ -1,4 +1,5 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const timestamps = require("mongoose-timestamp");
 
 const roomSchema = new mongoose.Schema({
   title: {
@@ -10,5 +11,7 @@ const roomSchema = new mongoose.Schema({
     required: false
   }
 });
+
+roomSchema.plugin(timestamps);
 
 module.exports = mongoose.model("Room", roomSchema);
